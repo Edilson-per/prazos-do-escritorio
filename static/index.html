@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="pt-BR" data-radius="sharp">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prazos do Escritório</title>
+<meta name="description" content="Intimações do Diário lidas por um assistente, prazos calculados e conferidos pelo advogado.">
+<meta name="theme-color" content="#f3efe6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' fill='none' stroke='%23c23b22' stroke-width='3'/%3E%3Cpath d='M9 22V10h8a5 5 0 010 10H9' fill='none' stroke='%23c23b22' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..600&family=Newsreader:opsz,wght@6..72,400..600&display=swap" rel="stylesheet">
+<style>
+/* Tokens de marca: start.mjs brand (taste-skill), com as cores do brief.
+   Papel cru, grafite, vermelhão de carimbo. Movimento: números do motion.md do skill. */
+:root {
+  --p-bg: #f3efe6; --p-surface: #ebe5d8; --p-paper: #fbf8f1; --p-ink: #22201c; --p-muted: #6b655a;
+  --p-line: #d9d1c1; --p-line-strong: #b9ae99;
+  --p-accent: #c23b22; --p-accent-ink: #fbf8f1; --p-accent-soft: #f4dcd3;
+  --p-pencil: #7a7466; --p-highlight: #f5e27a; --p-highlight-ink: #3b3311;
+  --u-hot: #c23b22; --u-warm: #a4561c; --u-mild: #5f6b55; --u-cool: #4b5a66; --u-done: #8c8576;
+  --p-hatch: repeating-linear-gradient(135deg, transparent 0 4px, rgba(34,32,28,.09) 4px 5px);
+  --font-text: "Host Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-sheet: "Newsreader", Georgia, serif;
+  --ease: cubic-bezier(.2,.8,.2,1); --ease-enter: cubic-bezier(.22,1,.36,1);
+  --m-in: 150ms; --m-out: 120ms; --m-press: 90ms;
+  --r: 3px;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --p-bg: #1d1b18; --p-surface: #27241f; --p-paper: #2e2a24; --p-ink: #ece6da; --p-muted: #a59d8f;
+  --p-line: #3a362f; --p-line-strong: #565044;
+  --p-accent: #ec6a4c; --p-accent-ink: #1d1b18; --p-accent-soft: #46271f;
+  --p-pencil: #a59d8f; --p-highlight: #6b5a12; --p-highlight-ink: #fbf0b8;
+  --u-hot: #ec6a4c; --u-warm: #d89151; --u-mild: #9fb08f; --u-cool: #93a7b6; --u-done: #7d766a;
+  --p-hatch: repeating-linear-gradient(135deg, transparent 0 4px, rgba(236,230,218,.08) 4px 5px);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --p-bg: #1d1b18; --p-surface: #27241f; --p-paper: #2e2a24; --p-ink: #ece6da; --p-muted: #a59d8f;
+    --p-line: #3a362f; --p-line-strong: #565044;
+    --p-accent: #ec6a4c; --p-accent-ink: #1d1b18; --p-accent-soft: #46271f;
+    --p-pencil: #a59d8f; --p-highlight: #6b5a12; --p-highlight-ink: #fbf0b8;
+    --u-hot: #ec6a4c; --u-warm: #d89151; --u-mild: #9fb08f; --u-cool: #93a7b6; --u-done: #7d766a;
+    --p-hatch: repeating-linear-gradient(135deg, transparent 0 4px, rgba(236,230,218,.08) 4px 5px);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--p-bg); color: var(--p-ink); font: 400 16px/1.5 var(--font-text); -webkit-font-smoothing: antialiased; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+a { color: inherit; }
+.skip { position: absolute; left: 12px; top: -60px; background: var(--p-ink); color: var(--p-bg); padding: 10px 14px; z-index: 50; }
+.skip:focus { top: 12px; }
+:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- topo ---------- */
+.top { border-bottom: 1px solid var(--p-line); background: var(--p-bg); position: sticky; top: 0; z-index: 20; }
+.top__in { max-width: 1440px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 28px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; letter-spacing: -.02em; text-decoration: none; }
+.brand__mark { width: 26px; height: 26px; border: 2.5px solid var(--p-accent); display: grid; place-items: center; color: var(--p-accent); font: 600 13px var(--font-mono); }
+.nav { display: flex; gap: 4px; }
+.nav button { all: unset; cursor: pointer; padding: 10px 12px; font-size: 15px; color: var(--p-muted); position: relative; min-height: 24px; }
+.nav button::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform var(--m-out) var(--ease); }
+.nav button:hover { color: var(--p-ink); }
+.nav button:hover::after { transform: scaleX(1); transition-duration: var(--m-in); }
+.nav button { white-space: nowrap; }
+.nav button:focus-visible, .chip:focus-visible, .pin:focus-visible, .icon-btn:focus-visible, .btn:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 2px; }
+.nav button[aria-current="page"] { color: var(--p-ink); }
+.nav button[aria-current="page"]::after { transform: scaleX(1); height: 2px; background: var(--p-accent); }
+.top__meta { margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--p-muted); }
+.ia { display: inline-flex; align-items: center; gap: 6px; border: 1px dashed var(--p-line-strong); padding: 4px 9px; }
+.ia::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--u-warm); }
+.ia.ok::before { background: var(--u-mild); }
+.icon-btn { all: unset; cursor: pointer; width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--p-line); border-radius: var(--r); color: var(--p-ink); transition: background var(--m-out) var(--ease), transform var(--m-out) var(--ease); }
+.icon-btn:hover { background: var(--p-surface); transition-duration: var(--m-in); }
+
+.aviso { margin: 0; padding: 10px 32px; font-size: 14px; text-align: center; background: var(--p-accent-soft); color: var(--p-ink); border-bottom: 1px solid var(--p-line); }
+
+/* ---------- régua do tempo ---------- */
+.ruler { border-bottom: 1px solid var(--p-line); background: var(--p-paper); }
+.ruler__in { max-width: 1440px; margin: 0 auto; padding: 18px 32px 14px; }
+.ruler__head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 10px; }
+.ruler__head h2 { margin: 0; font-size: 13px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--p-muted); }
+.ruler__legend { margin-left: auto; display: flex; gap: 16px; font-size: 12px; color: var(--p-muted); flex-wrap: wrap; }
+.ruler__legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 10px; border: 1px solid var(--p-line-strong); display: inline-block; }
+.sw--off { background: var(--p-hatch); }
+.sw--fer { background: var(--p-accent-soft); border-color: var(--p-accent); }
+.ruler__scroll { overflow-x: auto; scrollbar-width: thin; }
+.days { display: grid; grid-template-columns: 54px repeat(var(--n), minmax(34px, 1fr)); min-width: calc(54px + var(--n) * 34px); position: relative; }
+.day { border-left: 1px solid var(--p-line); padding: 0 0 6px; display: flex; flex-direction: column; align-items: center; min-height: 112px; position: relative; }
+.day__wd { font-size: 11px; color: var(--p-muted); text-transform: uppercase; letter-spacing: .04em; padding-top: 2px; }
+.day__n { font: 500 15px var(--font-mono); }
+.day__month { position: absolute; top: -16px; left: 4px; font: 500 11px var(--font-mono); color: var(--p-muted); text-transform: uppercase; white-space: nowrap; }
+.day--off { background: var(--p-hatch); }
+.day--off .day__n { color: var(--p-muted); }
+.day--fer { background: var(--p-accent-soft); }
+.day--fer .day__n { color: var(--p-accent); }
+.day--rec { background: var(--p-hatch); }
+.day--today { box-shadow: inset 2px 0 0 var(--p-accent); }
+.day--today .day__n { color: var(--p-accent); font-weight: 600; }
+.day__today { position: absolute; bottom: 2px; font: 600 10px var(--font-mono); color: var(--p-accent); letter-spacing: .04em; }
+.pins { display: flex; flex-direction: column; gap: 3px; margin-top: 8px; width: calc(100% - 6px); }
+.pin { all: unset; cursor: pointer; height: 20px; border-radius: 2px; font: 600 11px var(--font-mono); display: grid; place-items: center; color: var(--p-accent-ink); transition: transform var(--m-out) var(--ease); }
+.pin:hover { transform: translateY(-2px); transition-duration: var(--m-in); }
+.pin--hot { background: var(--u-hot); } .pin--warm { background: var(--u-warm); } .pin--mild { background: var(--u-mild); } .pin--cool { background: var(--u-cool); }
+.pin--sug { background: transparent; color: var(--p-ink); border: 1.5px dashed currentColor; }
+.pin--sug.pin--hot { color: var(--u-hot); } .pin--sug.pin--warm { color: var(--u-warm); } .pin--sug.pin--mild { color: var(--u-mild); } .pin--sug.pin--cool { color: var(--u-cool); }
+.pin.is-sel { outline: 2px solid var(--p-ink); outline-offset: 1px; }
+.day--late { border-left: 0; background: transparent; }
+.day--late .day__wd { color: var(--u-hot); }
+
+/* ---------- resumo ---------- */
+.tally { max-width: 1440px; margin: 0 auto; padding: 22px 32px 0; display: grid; grid-template-columns: repeat(3, auto) 1fr; gap: 40px; align-items: end; }
+.tally__n { font: 500 44px/1 var(--font-mono); letter-spacing: -.04em; }
+.tally__l { font-size: 14px; color: var(--p-muted); margin-top: 4px; }
+.tally__item--hot .tally__n { color: var(--u-hot); }
+.tally__actions { justify-self: end; display: flex; gap: 10px; }
+
+/* ---------- botões ---------- */
+.btn { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: var(--r); font: 500 15px var(--font-text); background: var(--p-ink); color: var(--p-bg); border: 1px solid var(--p-ink); transition: background var(--m-out) var(--ease), transform var(--m-out) var(--ease), border-color var(--m-out) var(--ease); white-space: nowrap; }
+.btn--accent { background: var(--p-accent); border-color: var(--p-accent); color: var(--p-accent-ink); }
+.btn--ghost { background: transparent; color: var(--p-ink); border-color: var(--p-line-strong); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: translateY(-1px); transition-duration: var(--m-in); background: color-mix(in srgb, var(--p-ink) 86%, var(--p-bg)); }
+  .btn--accent:hover { background: color-mix(in srgb, var(--p-accent) 86%, var(--p-ink)); }
+  .btn--ghost:hover { background: var(--p-surface); border-color: var(--p-ink); }
+}
+.btn:active { transform: translateY(1px) scale(.985); transition-duration: var(--m-press); }
+.btn[disabled] { opacity: .5; cursor: progress; }
+
+/* ---------- mesa ---------- */
+.desk { max-width: 1440px; margin: 0 auto; padding: 24px 32px 64px; display: grid; grid-template-columns: minmax(340px, 420px) 1fr; gap: 28px; align-items: start; }
+.desk > * { min-width: 0; }
+@media (min-width: 1101px) { .list-col { position: sticky; top: 80px; max-height: calc(100vh - 96px); overflow-y: auto; padding: 2px 4px 4px 2px; } }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+.chip { all: unset; cursor: pointer; font-size: 14px; padding: 0 12px; min-height: 36px; display: inline-flex; align-items: center; border: 1px solid var(--p-line); border-radius: 999px; color: var(--p-muted); transition: border-color var(--m-out) var(--ease), color var(--m-out) var(--ease); }
+.chip:hover { color: var(--p-ink); border-color: var(--p-line-strong); transition-duration: var(--m-in); }
+.chip[aria-pressed="true"] { background: var(--p-ink); color: var(--p-bg); border-color: var(--p-ink); }
+.trib { display: flex; align-items: center; gap: 10px; margin: -4px 0 16px; padding-bottom: 14px; border-bottom: 1px solid var(--p-line); }
+.trib label { font-size: 13px; color: var(--p-muted); }
+.trib select { flex: 1; font: inherit; font-size: 14px; min-height: 40px; padding: 0 10px; background: var(--p-bg); color: var(--p-ink); border: 1px solid var(--p-line); border-radius: var(--r); }
+
+.cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.card { display: grid; grid-template-columns: 74px 1fr; gap: 0 16px; padding: 14px 16px 14px 14px; background: var(--p-paper); border: 1px solid var(--p-line-strong); border-radius: var(--r); cursor: pointer; position: relative; transition: transform 120ms var(--ease), border-color 120ms var(--ease), box-shadow 120ms var(--ease); }
+.card--sug { border-style: dashed; border-color: var(--p-pencil); }
+@media (hover: hover) and (pointer: fine) { .card:hover { transform: translateY(-2px); border-color: var(--p-ink); box-shadow: 0 10px 24px rgba(34,32,28,.08); transition-duration: 180ms; } }
+.card.is-sel { border: 2px solid var(--p-ink); padding: 13px 15px 13px 13px; }
+.card--done { opacity: .62; }
+.count { border-right: 1px solid var(--p-line); padding-right: 12px; display: flex; flex-direction: column; justify-content: center; }
+.count__n { font: 500 34px/1 var(--font-mono); letter-spacing: -.05em; }
+.count__l { font-size: 11px; color: var(--p-muted); line-height: 1.25; margin-top: 4px; }
+.u-hot { color: var(--u-hot); } .u-warm { color: var(--u-warm); } .u-mild { color: var(--u-mild); } .u-cool { color: var(--u-cool); } .u-done { color: var(--u-done); }
+.card__what { font-weight: 600; font-size: 16px; line-height: 1.3; margin: 0 0 4px; }
+.card__proc { font-size: 13px; color: var(--p-muted); overflow-wrap: anywhere; }
+.card__due { font-size: 14px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.card .stamp__in { font-size: 10px; padding: 4px 6px; }
+
+/* carimbo */
+.stamp { display: inline-block; transform: rotate(-4deg); }
+.stamp__in { display: inline-block; white-space: nowrap; font: 600 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; padding: 5px 7px; border: 2px solid currentColor; outline: 1px solid currentColor; outline-offset: 2px; border-radius: 2px; }
+.stamp--conferir { color: var(--u-warm); } .stamp--conferido { color: var(--p-accent); } .stamp--cumprido { color: var(--u-done); }
+.stamp--big .stamp__in { font-size: 15px; padding: 8px 12px; border-width: 3px; }
+.stamp--apply .stamp__in { animation: carimbo 340ms var(--ease-enter) both; }
+@keyframes carimbo { 0% { transform: scale(1.7); opacity: 0; } 55% { opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+
+/* ---------- detalhe ---------- */
+.sheet { background: var(--p-paper); border: 1px solid var(--p-line-strong); border-radius: var(--r); }
+.sheet__head { padding: 22px 28px 20px; border-bottom: 1px solid var(--p-line); display: grid; grid-template-columns: 1fr auto; gap: 8px 20px; align-items: start; }
+.back { display: none; }
+.proc { font: 500 20px var(--font-mono); letter-spacing: -.02em; margin: 0; }
+.sub { color: var(--p-muted); font-size: 14px; margin-top: 2px; }
+.sub a { text-underline-offset: 3px; }
+.block { padding: 22px 28px; border-bottom: 1px solid var(--p-line); }
+.block:last-child { border-bottom: 0; }
+.label { font-size: 12px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--p-muted); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+.due { display: grid; grid-template-columns: auto auto 1fr; gap: 0 36px; align-items: end; }
+.due__n { font: 500 88px/.85 var(--font-mono); letter-spacing: -.06em; }
+.due__l { font-size: 14px; color: var(--p-muted); margin-top: 8px; }
+.due__date { font: 500 28px/1.1 var(--font-mono); letter-spacing: -.03em; }
+.due__facts { justify-self: end; text-align: right; font-size: 14px; color: var(--p-muted); }
+.due__facts b { color: var(--p-ink); font-weight: 500; }
+
+.track { margin-top: 22px; overflow-x: auto; padding-bottom: 4px; }
+.track__row { display: flex; gap: 3px; align-items: flex-end; min-width: min-content; }
+.tk { flex: 1 1 0; min-width: 12px; max-width: 34px; height: 26px; background: var(--p-surface); position: relative; border-radius: 1px; }
+.tk--count { background: var(--p-ink); opacity: .82; }
+.tk--off { background: var(--p-hatch); border: 1px solid var(--p-line); }
+.tk--fer { background: var(--p-accent-soft); border: 1px solid var(--p-accent); }
+.tk--rec { background: var(--p-hatch); height: 12px; }
+.tk--edge { height: 40px; background: var(--p-ink); }
+.tk--venc { height: 48px; background: var(--p-accent); opacity: 1; }
+.tk--disp, .tk--pub { height: 34px; background: transparent; border: 1.5px solid var(--p-ink); }
+.track__marks { display: flex; gap: 3px; min-width: min-content; margin-top: 6px; }
+.track__marks span { flex: 1 1 0; min-width: 12px; max-width: 34px; font: 500 10px var(--font-mono); color: var(--p-muted); text-align: center; overflow: visible; white-space: nowrap; }
+.track__key { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--p-muted); margin-top: 12px; }
+.track__key b { font-family: var(--font-mono); color: var(--p-ink); font-weight: 500; }
+
+.memo { margin: 14px 0 0; padding-left: 20px; font-size: 14px; color: var(--p-muted); }
+.memo li { margin-bottom: 3px; }
+details > summary { cursor: pointer; font-size: 14px; color: var(--p-ink); text-decoration: underline; text-decoration-color: var(--p-line-strong); text-underline-offset: 4px; list-style: none; margin-top: 14px; display: inline-block; min-height: 24px; }
+details > summary::-webkit-details-marker { display: none; }
+
+.note { border-left: 3px solid var(--u-warm); background: color-mix(in srgb, var(--u-warm) 10%, transparent); padding: 10px 14px; font-size: 15px; margin-top: 18px; }
+.note--hot { border-color: var(--u-hot); background: color-mix(in srgb, var(--u-hot) 10%, transparent); }
+
+.form { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; margin-top: 20px; }
+.field label { display: block; font-size: 13px; color: var(--p-muted); margin-bottom: 4px; }
+.field input, .field select, .field textarea { font: inherit; font-size: 16px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--p-line-strong); border-radius: var(--r); background: var(--p-bg); color: var(--p-ink); width: 100%; }
+.field input[type="number"] { font-family: var(--font-mono); width: 92px; }
+.field textarea { min-height: 84px; resize: vertical; }
+.check { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 15px; cursor: pointer; }
+.check input { width: 20px; height: 20px; accent-color: var(--p-accent); }
+
+/* a lápis: sugestão do assistente */
+.pencil { border: 1.5px dashed var(--p-pencil); border-radius: var(--r); padding: 16px 18px; color: var(--p-ink); background: transparent; }
+.pencil__tag { font: 500 12px var(--font-mono); color: var(--p-pencil); letter-spacing: .04em; text-transform: uppercase; }
+.pencil dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 20px; margin: 12px 0 0; }
+.pencil dt { font-size: 12px; color: var(--p-pencil); }
+.pencil dd { margin: 0; font-size: 15px; }
+.pencil ul { margin: 12px 0 0; padding-left: 18px; font-size: 14px; color: var(--p-muted); }
+.client { margin-top: 14px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; }
+.client p { margin: 0; font-size: 16px; }
+
+.clip { font-size: 15px; white-space: pre-wrap; background: var(--p-bg); border: 1px solid var(--p-line); border-radius: var(--r); padding: 16px 18px; max-height: 280px; overflow: auto; }
+
+/* folha da minuta */
+.minuta { position: relative; margin-top: 20px; background: var(--p-paper); border: 1px solid var(--p-line-strong); box-shadow: 0 1px 0 var(--p-line), 0 18px 40px -24px rgba(34,32,28,.35); padding: 40px 48px 48px 72px; font: 400 17px/1.7 var(--font-sheet); counter-reset: ln; }
+.minuta::before { content: ""; position: absolute; left: 52px; top: 0; bottom: 0; border-left: 1px solid var(--p-accent-soft); }
+.minuta__tarja { position: absolute; right: 0; top: 0; bottom: 0; width: 28px; background: var(--p-accent); color: var(--p-accent-ink); writing-mode: vertical-rl; display: flex; align-items: center; justify-content: center; font: 600 12px var(--font-mono); letter-spacing: .3em; }
+.minuta p, .minuta h4, .minuta h5 { margin: 0 0 .7em; position: relative; padding-right: 20px; }
+.minuta p::before, .minuta h4::before, .minuta h5::before { counter-increment: ln; content: counter(ln); position: absolute; left: -60px; width: 36px; text-align: right; font: 400 11px/2.3 var(--font-mono); color: var(--p-muted); }
+.minuta h4 { font-size: 19px; font-weight: 600; text-align: center; letter-spacing: .02em; }
+.minuta h5 { font-size: 17px; font-weight: 600; }
+.minuta hr { border: 0; border-top: 1px dashed var(--p-line-strong); margin: 1.4em 0; }
+.mk { background: var(--p-highlight); color: var(--p-highlight-ink); padding: 1px 4px; font: 500 14px var(--font-mono); border-radius: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.mk--jur { background: transparent; color: var(--p-accent); border: 1.5px dashed var(--p-accent); }
+.minuta__bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+.left { font: 500 15px var(--font-mono); }
+.left b { color: var(--p-accent); }
+
+.log { list-style: none; margin: 0; padding: 0; font: 400 13px/1.7 var(--font-mono); color: var(--p-muted); }
+.log b { color: var(--p-ink); font-weight: 500; }
+
+/* vazio e páginas */
+.empty { padding: 72px 32px; text-align: center; border: 1.5px dashed var(--p-line-strong); border-radius: var(--r); }
+.empty h2 { font-size: 26px; font-weight: 500; letter-spacing: -.02em; margin: 0 0 8px; }
+.empty p { color: var(--p-muted); max-width: 46ch; margin: 0 auto 20px; }
+.page { max-width: 880px; margin: 0 auto; padding: 40px 32px 80px; }
+.page h1 { font-size: 40px; font-weight: 500; letter-spacing: -.035em; line-height: 1.1; margin: 0 0 10px; }
+.page .lead { color: var(--p-muted); font-size: 18px; margin: 0 0 28px; max-width: 60ch; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
+.row .field { flex: 1; min-width: 140px; }
+.status { margin-top: 18px; font-size: 15px; min-height: 24px; }
+.status--err { color: var(--u-hot); }
+.result { font: 500 15px var(--font-mono); }
+.facts { display: grid; gap: 0; border-top: 1px solid var(--p-line); }
+.facts > div { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--p-line); }
+.facts dt { font-weight: 600; }
+.facts dd { margin: 0; color: var(--p-ink); }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl th, .tbl td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--p-line); }
+.tbl td:first-child { font-family: var(--font-mono); }
+.loading { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--p-line-strong); border-top-color: var(--p-accent); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* entrada única no carregamento */
+[data-enter] { animation: enter 600ms var(--ease-enter) both; }
+[data-enter="2"] { animation-delay: 120ms; } [data-enter="3"] { animation-delay: 220ms; }
+@keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---------- telas menores ---------- */
+@media (max-width: 1100px) {
+  .desk { grid-template-columns: 1fr; }
+  .desk.has-sel .list-col { display: none; }
+  .desk:not(.has-sel) .detail-col { display: none; }
+  .back { display: inline-flex; grid-column: 1 / -1; justify-self: start; margin-bottom: 6px; }
+}
+@media (max-width: 760px) {
+  .top__in, .ruler__in, .tally, .desk, .page { padding-left: 16px; padding-right: 16px; }
+  .top__in { gap: 12px; height: 56px; }
+  .brand span:last-child { display: none; }
+  .nav { overflow-x: auto; }
+  .nav button { padding: 10px 8px; font-size: 14px; white-space: nowrap; }
+  .ia, #hoje { display: none; }
+  .stamp--big .stamp__in { font-size: 12px; padding: 6px 8px; border-width: 2px; }
+  .proc { font-size: 17px; }
+  .nav, .ruler__scroll { scrollbar-width: none; }
+  .nav::-webkit-scrollbar, .ruler__scroll::-webkit-scrollbar { display: none; }
+  .days { grid-template-columns: 40px repeat(var(--n), minmax(40px, 1fr)); min-width: calc(40px + var(--n) * 40px); }
+  .tally { grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
+  .tally__n { font-size: 34px; }
+  .tally__l { font-size: 13px; }
+  .tally__actions { grid-column: 1 / -1; justify-self: stretch; }
+  .tally__actions .btn { flex: 1; }
+  .ruler__legend { display: none; }
+  .sheet__head, .block { padding-left: 16px; padding-right: 16px; }
+  .due { grid-template-columns: auto 1fr; gap: 0 20px; }
+  .due__n { font-size: 64px; }
+  .due__facts { grid-column: 1 / -1; justify-self: start; text-align: left; margin-top: 14px; }
+  .due__date { font-size: 22px; }
+  .minuta { padding: 28px 40px 32px 48px; font-size: 16px; }
+  .minuta::before { left: 36px; }
+  .minuta p::before, .minuta h4::before, .minuta h5::before { left: -46px; width: 28px; }
+  .minuta__tarja { width: 22px; }
+  .client { grid-template-columns: 1fr; }
+  .form .btn, .row .btn { width: 100%; }
+  .facts > div { grid-template-columns: 1fr; gap: 4px; }
+  .page h1 { font-size: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="top">
+  <div class="top__in">
+    <a class="brand" href="#conteudo" data-go="prazos"><span class="brand__mark" aria-hidden="true">P</span><span>Prazos do Escritório</span></a>
+    <nav class="nav" aria-label="Seções">
+      <button data-go="prazos" aria-current="page">Prazos</button>
+      <button data-go="buscar">Buscar no Diário</button>
+      <button data-go="calc">Calculadora</button>
+      <button data-go="dados">Seus dados</button>
+    </nav>
+    <div class="top__meta">
+      <span id="ia" class="ia">…</span>
+      <span id="hoje" class="mono"></span>
+      <button class="icon-btn" id="tema" aria-label="Alternar modo claro e escuro">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<p class="aviso" id="aviso" hidden>Demonstração com intimações fictícias. Não use dados reais de clientes: tudo aqui pode ser visto por quem tem o link e é apagado de tempos em tempos.</p>
+
+<main id="conteudo">
+  <!-- PRAZOS -->
+  <div id="v-prazos">
+    <section class="ruler" aria-labelledby="ruler-t" data-enter>
+      <div class="ruler__in">
+        <div class="ruler__head">
+          <h2 id="ruler-t">Próximos 30 dias</h2>
+          <div class="ruler__legend" aria-hidden="true">
+            <span><i class="sw"></i>dia útil</span>
+            <span><i class="sw sw--off"></i>fim de semana ou recesso</span>
+            <span><i class="sw sw--fer"></i>feriado</span>
+            <span><i class="sw" style="border-style:dashed"></i>prazo a conferir</span>
+          </div>
+        </div>
+        <div class="ruler__scroll" id="ruler"></div>
+      </div>
+    </section>
+
+    <section class="tally" aria-label="Resumo" data-enter="2">
+      <div class="tally__item tally__item--hot"><div class="tally__n" id="t-hoje">0</div><div class="tally__l">vencem hoje</div></div>
+      <div class="tally__item"><div class="tally__n" id="t-semana">0</div><div class="tally__l">em até 5 dias úteis</div></div>
+      <div class="tally__item"><div class="tally__n" id="t-conf">0</div><div class="tally__l">a conferir</div></div>
+      <div class="tally__actions">
+        <button class="btn btn--ghost" data-go="buscar">Buscar intimações</button>
+      </div>
+    </section>
+
+    <div class="desk" id="desk" data-enter="3">
+      <section class="list-col" aria-labelledby="lista-t">
+        <h2 id="lista-t" class="sr">Intimações</h2>
+        <div class="filters" role="group" aria-label="Filtrar">
+          <button class="chip" data-f="abertos" aria-pressed="true">Em aberto</button>
+          <button class="chip" data-f="a_conferir" aria-pressed="false">A conferir</button>
+          <button class="chip" data-f="concluido" aria-pressed="false">Cumpridos</button>
+          <button class="chip" data-f="todos" aria-pressed="false">Todos</button>
+        </div>
+        <div class="trib">
+          <label for="f-trib">Tribunal</label>
+          <select id="f-trib"><option value="">Todos os tribunais</option></select>
+        </div>
+        <ul class="cards" id="cards"></ul>
+      </section>
+      <section class="detail-col" id="detalhe" aria-live="polite"></section>
+    </div>
+  </div>
+
+  <!-- BUSCAR -->
+  <div id="v-buscar" class="page" hidden>
+    <h1>Buscar intimações no Diário</h1>
+    <p class="lead">Consulta o Diário de Justiça Eletrônico Nacional pelas comunicações em seu nome. Cada intimação nova é lida pelo assistente e entra na mesa como "a conferir".</p>
+    <form class="row" id="f-busca" novalidate>
+      <div class="field" style="max-width:200px"><label for="oab">Número da OAB</label><input id="oab" inputmode="numeric" autocomplete="off" class="mono"></div>
+      <div class="field" style="max-width:100px"><label for="uf">UF</label><input id="uf" value="SP" maxlength="2" class="mono"></div>
+      <div class="field"><label for="ini">De</label><input id="ini" type="date"></div>
+      <div class="field"><label for="fim">Até</label><input id="fim" type="date"></div>
+      <button class="btn btn--accent" type="submit" id="b-busca">Buscar no Diário</button>
+    </form>
+    <div class="status" id="s-busca" role="status"></div>
+    <p style="margin-top:36px;color:var(--p-muted);font-size:15px">Quer ver o fluxo sem consultar o Diário? <button class="btn btn--ghost" id="b-ex" style="margin-left:8px">Carregar 3 intimações de exemplo</button></p>
+  </div>
+
+  <!-- CALCULADORA -->
+  <div id="v-calc" class="page" hidden>
+    <h1>Calculadora de prazo</h1>
+    <p class="lead">Mesmo cálculo da mesa, para uma data avulsa. Considera feriados nacionais, os do tribunal informado e o recesso de 20/12 a 20/01.</p>
+    <form class="row" id="f-calc">
+      <div class="field"><label for="c-data">Disponibilizado em</label><input id="c-data" type="date"></div>
+      <div class="field" style="max-width:120px"><label for="c-dias">Dias</label><input id="c-dias" type="number" value="15" min="1"></div>
+      <div class="field" style="max-width:140px"><label for="c-trib">Tribunal</label><input id="c-trib" value="TJSP" class="mono"></div>
+      <div class="field" style="max-width:170px"><label for="c-cont">Contagem</label><select id="c-cont"><option value="uteis">Dias úteis</option><option value="corridos">Dias corridos</option></select></div>
+      <label class="check"><input type="checkbox" id="c-dobro"> Em dobro</label>
+      <button class="btn" type="submit">Calcular</button>
+    </form>
+    <div id="c-res" style="margin-top:28px"></div>
+  </div>
+
+  <!-- SEUS DADOS -->
+  <div id="v-dados" class="page" hidden>
+    <h1>Onde ficam os dados do seu escritório</h1>
+    <p class="lead">O sigilo profissional vale também para a ferramenta. Esta página diz, sem letra miúda, o que acontece com cada informação.</p>
+    <dl class="facts">
+      <div><dt>Onde ficam</dt><dd id="d-onde">Neste protótipo, num arquivo no próprio computador do escritório. Na versão final, em servidores no Brasil (região de São Paulo), criptografados.</dd></div>
+      <div><dt>Quem lê</dt><dd>Só as pessoas do escritório com acesso. O assistente lê cada intimação para sugerir o prazo e a peça; nada é publicado ou enviado a terceiros.</dd></div>
+      <div><dt>Treino de IA</dt><dd id="d-treino">…</dd></div>
+      <div><dt>Quem decide</dt><dd>O advogado. Todo prazo entra como "a conferir" e só vale depois do carimbo "conferido". Toda minuta sai com a tarja de minuta e os pontos a completar marcados.</dd></div>
+      <div><dt>Jurisprudência</dt><dd>As minutas não trazem citações de julgados. Onde caberia uma, aparece um marcador para pesquisa, e a pesquisa só aceitará decisões com link para a fonte oficial.</dd></div>
+      <div><dt>Histórico</dt><dd>Cada importação, confirmação e minuta fica registrada com data e hora, no histórico de cada intimação.</dd></div>
+    </dl>
+    <h2 style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin:48px 0 6px">Feriados por tribunal</h2>
+    <p style="color:var(--p-muted);margin:0 0 16px">Além dos feriados nacionais. Base inicial, a conferir com o calendário oficial de cada tribunal (arquivo <span class="mono">dados/feriados_tribunais.json</span>).</p>
+    <table class="tbl" id="t-fer"></table>
+  </div>
+</main>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const br = (iso) => iso ? iso.split("-").reverse().join("/") : "—";
+const dt = (iso) => new Date(iso + "T12:00:00");
+const iso = (d) => d.toISOString().slice(0, 10);
+const addDays = (isoS, n) => { const d = dt(isoS); d.setDate(d.getDate() + n); return iso(d); };
+const WD = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+const MES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+const longDate = (isoS) => { const d = dt(isoS); return `${WD[d.getDay()]}, ${d.getDate()} ${MES[d.getMonth()]}`; };
+const PECAS = { contestacao: "Contestação", manifestacao: "Manifestação", recurso_apelacao: "Apelação", embargos_declaracao: "Embargos de declaração", nenhuma: "Nenhuma" };
+const SHORT = { contestacao: "CT", manifestacao: "MF", recurso_apelacao: "AP", embargos_declaracao: "ED", nenhuma: "—" };
+
+const S = { itens: [], sel: null, modelos: [], hoje: null, filtro: "abertos", trib: "", carimbo: null, status: null };
+
+async function api(path, body) {
+  const r = await fetch(path, body === undefined ? {} : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.erro || r.statusText);
+  return j;
+}
+
+/* ---------- tema ---------- */
+(function () {
+  let t = null; try { t = localStorage.getItem("tema"); } catch (e) {}
+  if (t) document.documentElement.dataset.theme = t;
+  $("#tema").onclick = () => {
+    const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    const novo = dark ? "light" : "dark";
+    document.documentElement.dataset.theme = novo;
+    try { localStorage.setItem("tema", novo); } catch (e) {}
+  };
+})();
+
+/* ---------- navegação ---------- */
+function go(v) {
+  ["prazos", "buscar", "calc", "dados"].forEach((n) => { $("#v-" + n).hidden = n !== v; });
+  $$(".nav button").forEach((b) => { if (b.dataset.go === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+  if (v === "dados") renderDados();
+  window.scrollTo(0, 0);
+}
+document.addEventListener("click", (e) => { const t = e.target.closest("[data-go]"); if (t) { e.preventDefault(); go(t.dataset.go); } });
+
+/* ---------- urgência ---------- */
+function urg(it) {
+  if (it.status === "concluido") return "done";
+  if (!it.prazo) return "cool";
+  const d = it.dias_restantes;
+  if (d <= 1) return "hot";
+  if (d <= 5) return "warm";
+  if (d <= 10) return "mild";
+  return "cool";
+}
+function countLabel(it) {
+  if (it.status === "concluido") return ["✓", "cumprido"];
+  if (!it.prazo) return ["—", "sem prazo"];
+  const d = it.dias_restantes;
+  if (d < 0) return ["!", "vencido"];
+  if (d === 0) return ["0", "vence hoje"];
+  return [String(d).padStart(2, "0"), d === 1 ? "dia útil" : "dias úteis"];
+}
+function stamp(status, big = false, apply = false) {
+  const m = { a_conferir: ["conferir", "a conferir"], confirmado: ["conferido", "conferido"], concluido: ["cumprido", "cumprido"] }[status] || ["conferir", status];
+  return `<span class="stamp stamp--${m[0]} ${big ? "stamp--big" : ""} ${apply ? "stamp--apply" : ""}"><span class="stamp__in">${m[1]}</span></span>`;
+}
+
+/* ---------- régua do tempo ---------- */
+async function renderRuler() {
+  const N = 30, ini = S.hoje, fim = addDays(ini, N - 1);
+  const cal = await api(`/api/calendario?inicio=${ini}&fim=${fim}`);
+  const abertos = S.itens.filter((i) => i.prazo && i.status !== "concluido");
+  const late = abertos.filter((i) => i.prazo.vencimento < ini);
+  const pin = (it) => `<button class="pin pin--${urg(it)} ${it.status === "a_conferir" ? "pin--sug" : ""} ${it.id === S.sel ? "is-sel" : ""}" data-id="${it.id}" aria-label="${esc((PECAS[it.extracao?.peca_sugerida] || "Prazo") + ", " + it.dados.processo + ", vence " + br(it.prazo.vencimento))}">${SHORT[it.extracao?.peca_sugerida] || "•"}</button>`;
+  let html = `<div class="days" style="--n:${N}"><div class="day day--late"><span class="day__wd">${late.length ? "vencidos" : "&nbsp;"}</span><span class="day__n">&nbsp;</span><div class="pins">${late.map(pin).join("")}</div></div>`;
+  cal.forEach((c, i) => {
+    const d = dt(c.data), fer = c.motivo && c.motivo.startsWith("feriado");
+    const cls = ["day", !c.util && !fer ? "day--off" : "", fer ? "day--fer" : "", c.data === S.hoje ? "day--today" : ""].join(" ");
+    const month = i === 0 || d.getDate() === 1 ? `<span class="day__month">${MES[d.getMonth()]}</span>` : "";
+    const title = c.motivo ? ` title="${esc(c.motivo)}"` : c.recesso ? ` title="recesso forense"` : "";
+    html += `<div class="${cls}"${title}>${month}<span class="day__wd">${WD[d.getDay()].slice(0, 3)}</span><span class="day__n">${d.getDate()}</span><div class="pins">${abertos.filter((it) => it.prazo.vencimento === c.data).map(pin).join("")}</div>${c.data === S.hoje ? `<span class="day__today">HOJE</span>` : ""}</div>`;
+  });
+  html += `</div>`;
+  $("#ruler").innerHTML = html;
+  $("#ruler").style.paddingTop = "16px";
+  $$(".pin", $("#ruler")).forEach((b) => b.onclick = () => select(+b.dataset.id));
+}
+
+/* ---------- resumo + lista ---------- */
+function renderTally() {
+  const ab = S.itens.filter((i) => i.status !== "concluido" && i.prazo);
+  $("#t-hoje").textContent = ab.filter((i) => i.dias_restantes <= 0).length;
+  $("#t-semana").textContent = ab.filter((i) => i.dias_restantes > 0 && i.dias_restantes <= 5).length;
+  $("#t-conf").textContent = S.itens.filter((i) => i.status === "a_conferir").length;
+}
+
+function renderList() {
+  const tribs = [...new Set(S.itens.map((i) => i.dados.tribunal).filter(Boolean))].sort();
+  const sel = $("#f-trib"); const cur = sel.value;
+  sel.innerHTML = `<option value="">Todos os tribunais</option>` + tribs.map((t) => `<option ${t === cur ? "selected" : ""}>${esc(t)}</option>`).join("");
+  let lista = S.itens.filter((i) => {
+    if (S.trib && i.dados.tribunal !== S.trib) return false;
+    if (S.filtro === "abertos") return i.status !== "concluido";
+    if (S.filtro === "todos") return true;
+    return i.status === S.filtro;
+  });
+  lista.sort((a, b) => (a.prazo?.vencimento || "9999") < (b.prazo?.vencimento || "9999") ? -1 : 1);
+  if (!S.itens.length) {
+    $("#cards").innerHTML = `<li class="empty"><h2>A mesa está vazia</h2><p>Busque no Diário as intimações em seu nome. O assistente lê cada uma e deixa o prazo pronto para você conferir.</p><button class="btn btn--accent" data-go="buscar">Buscar intimações</button></li>`;
+    return;
+  }
+  if (!lista.length) {
+    $("#cards").innerHTML = `<li class="empty"><h2>Nada neste filtro</h2><p>Nenhuma intimação com esse status${S.trib ? " em " + esc(S.trib) : ""}.</p><button class="btn btn--ghost" id="limpa">Mostrar todas em aberto</button></li>`;
+    $("#limpa").onclick = () => { S.filtro = "abertos"; S.trib = ""; $("#f-trib").value = ""; syncChips(); renderList(); };
+    return;
+  }
+  $("#cards").innerHTML = lista.map((it) => {
+    const u = urg(it), [n, l] = countLabel(it);
+    return `<li class="card ${it.status === "a_conferir" ? "card--sug" : ""} ${it.status === "concluido" ? "card--done" : ""} ${it.id === S.sel ? "is-sel" : ""}" data-id="${it.id}" tabindex="0" role="button" aria-label="${esc((it.extracao?.providencia || "Intimação") + ", processo " + it.dados.processo)}">
+      <div class="count"><span class="count__n u-${u}">${n}</span><span class="count__l">${l}</span></div>
+      <div>
+        <p class="card__what">${esc(it.extracao?.providencia || it.dados.tipo_documento || "Intimação")}</p>
+        <div class="card__proc mono">${esc(it.dados.tribunal)} · ${esc(it.dados.processo)}</div>
+        <div class="card__due"><span>${it.prazo ? `Vence <b class="mono">${br(it.prazo.vencimento)}</b> <span style="color:var(--p-muted)">${longDate(it.prazo.vencimento).split(",")[0]}</span>` : `<span style="color:var(--p-muted)">Sem prazo identificado</span>`}</span>${stamp(it.status)}</div>
+      </div>
+    </li>`;
+  }).join("");
+  $$(".card").forEach((c) => {
+    c.onclick = () => select(+c.dataset.id);
+    c.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(+c.dataset.id); } };
+  });
+}
+function syncChips() { $$(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.f === S.filtro))); }
+$$(".chip").forEach((c) => c.onclick = () => { S.filtro = c.dataset.f; syncChips(); renderList(); });
+$("#f-trib").onchange = (e) => { S.trib = e.target.value; renderList(); };
+
+function select(id) {
+  S.sel = id; $("#desk").classList.add("has-sel");
+  renderList(); renderRuler(); renderDetail();
+  if (matchMedia("(max-width: 1100px)").matches) $("#detalhe").scrollIntoView({ block: "start" });
+}
+
+/* ---------- mini-régua do cálculo ---------- */
+async function renderTrack(it) {
+  const p = it.prazo, el = $("#track"); if (!p || !el) return;
+  const cal = await api(`/api/calendario?inicio=${p.disponibilizacao}&fim=${p.vencimento}&tribunal=${encodeURIComponent(it.dados.tribunal || "")}`);
+  let row = "", marks = "", contados = 0, fer = [];
+  cal.forEach((c) => {
+    let cls = "tk", lab = "", tip = longDate(c.data);
+    const isFer = c.motivo && c.motivo.startsWith("feriado");
+    if (c.data === p.disponibilizacao) { cls += " tk--disp"; lab = "D"; tip += " · disponibilizado"; }
+    else if (c.data === p.publicacao) { cls += " tk--pub"; lab = "P"; tip += " · publicado"; }
+    else if (c.data === p.vencimento) { cls += " tk--venc"; contados++; lab = String(contados); tip += " · vencimento"; }
+    else if (c.data >= p.inicio && !c.recesso && (p.contagem === "corridos" || c.util)) {
+      contados++; cls += " tk--count"; tip += ` · dia ${contados}`;
+      if (contados === 1 || contados % 5 === 0) lab = String(contados);
+    }
+    else if (c.recesso) { cls += " tk--rec"; tip += " · recesso"; }
+    else if (isFer) { cls += " tk--fer"; tip += " · " + c.motivo; fer.push(`${br(c.data).slice(0, 5)} ${c.motivo.replace("feriado: ", "")}`); }
+    else if (!c.util) { cls += " tk--off"; tip += " · " + (c.motivo || ""); }
+    row += `<span class="${cls}" title="${esc(tip)}"></span>`;
+    marks += `<span>${lab}</span>`;
+  });
+  el.innerHTML = `<div class="track__row" role="img" aria-label="Linha do tempo do prazo: ${contados} dias contados de ${br(p.inicio)} a ${br(p.vencimento)}${fer.length ? ", com feriados em " + esc(fer.join(", ")) : ""}">${row}</div><div class="track__marks" aria-hidden="true">${marks}</div>
+    <div class="track__key"><span><b>D</b> disponibilizado ${br(p.disponibilizacao)}</span><span><b>P</b> publicado ${br(p.publicacao)}</span><span><b>1</b> início ${br(p.inicio)}</span>${fer.length ? `<span style="color:var(--p-accent)">Feriados pulados: ${esc(fer.join("; "))}</span>` : ""}</div>`;
+}
+
+/* ---------- minuta ---------- */
+function inline(s) {
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+    .replace(/\[(PESQUISAR JURISPRUD[^\]]*)\]/g, '<mark class="mk mk--jur">$1</mark>')
+    .replace(/\[((?:COMPLETAR|CONFERIR)[^\]]*)\]/g, '<mark class="mk">$1</mark>');
+}
+function renderMinuta(md) {
+  const out = []; let para = [];
+  const flush = () => { if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } };
+  md.split(/\r?\n/).forEach((l) => {
+    const t = l.trim();
+    if (!t) return flush();
+    if (/^>/.test(t)) { flush(); return; }
+    if (/^---+$/.test(t)) { flush(); out.push("<hr>"); return; }
+    if (/^##\s/.test(t)) { flush(); out.push(`<h4>${inline(t.replace(/^##\s*/, ""))}</h4>`); return; }
+    if (/^#{3,}\s/.test(t)) { flush(); out.push(`<h5>${inline(t.replace(/^#+\s*/, ""))}</h5>`); return; }
+    if (/^[a-z]\)\s/.test(t)) { flush(); out.push(`<p>${inline(t)}</p>`); return; }
+    para.push(t);
+  });
+  flush();
+  return out.join("");
+}
+const pendentes = (md) => (md.match(/\[(COMPLETAR|PESQUISAR|CONFERIR)[^\]]*\]/g) || []).length;
+
+function baixarWord(it) {
+  const html = `<html><head><meta charset="utf-8"><style>body{font-family:"Times New Roman";font-size:12pt;line-height:1.5}h4{text-align:center}mark{background:#f5e27a}</style></head><body>${renderMinuta(it.minuta)}</body></html>`;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + html], { type: "application/msword" }));
+  a.download = `minuta-${it.dados.processo.replace(/[^\d]/g, "").slice(0, 20)}.doc`;
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ---------- detalhe ---------- */
+function renderDetail() {
+  const it = S.itens.find((i) => i.id === S.sel);
+  if (!it) {
+    $("#desk").classList.remove("has-sel");
+    $("#detalhe").innerHTML = S.itens.length ? `<div class="empty"><h2>Escolha um prazo</h2><p>Clique numa intimação da lista ou num marcador da régua para ver o cálculo, a sugestão do assistente e a minuta.</p></div>` : "";
+    return;
+  }
+  const e = it.extracao || {}, p = it.prazo, d = it.dados;
+  const u = urg(it), [n, l] = countLabel(it);
+  const apply = S.carimbo === it.id; S.carimbo = null;
+  const falta = it.minuta ? pendentes(it.minuta) : 0;
+  $("#detalhe").innerHTML = `
+  <article class="sheet">
+    <header class="sheet__head">
+      <button class="btn btn--ghost back" id="voltar">← Voltar à lista</button>
+      <div>
+        <h2 class="proc">${esc(d.processo)}</h2>
+        <div class="sub">${esc(d.orgao)} · ${esc(d.tribunal)} · ${esc(d.classe || "")}${d.link ? ` · <a href="${esc(d.link)}" target="_blank" rel="noopener">documento no tribunal</a>` : ""}</div>
+      </div>
+      ${stamp(it.status, true, apply)}
+    </header>
+
+    <section class="block" aria-labelledby="h-prazo">
+      <h3 class="label" id="h-prazo">Prazo</h3>
+      ${p ? `
+      <div class="due">
+        <div><div class="due__n u-${u}">${n}</div><div class="due__l">${l}</div></div>
+        <div><div class="due__date">${br(p.vencimento)}</div><div class="due__l">${longDate(p.vencimento)}</div></div>
+        <div class="due__facts"><b class="mono">${p.dias}</b> dias ${p.contagem === "uteis" ? "úteis" : "corridos"}${p.em_dobro ? " (em dobro)" : ""}<br>publicado em <b class="mono">${br(p.publicacao)}</b></div>
+      </div>
+      <div class="track" id="track"></div>
+      <details><summary>Memória de cálculo com os artigos</summary><ol class="memo">${p.memoria.map((m) => `<li>${esc(m)}</li>`).join("")}</ol></details>`
+      : `<p style="margin:0;color:var(--p-muted)">O assistente não encontrou prazo nesta intimação. Se houver, informe abaixo.</p>`}
+      ${e.prazo_origem === "inferido_da_lei" ? `<div class="note">O número de dias não está escrito na intimação: o assistente deduziu da lei (${esc(e.fundamento_prazo)}). Confira antes de confirmar.</div>` : ""}
+      ${p && it.dias_restantes < 0 && it.status !== "concluido" ? `<div class="note note--hot">Este prazo venceu em ${br(p.vencimento)}. Verifique no processo se a providência foi tomada.</div>` : ""}
+      <form class="form" id="f-conf">
+        <div class="field"><label for="f-dias">Dias</label><input id="f-dias" type="number" min="0" value="${p ? (p.em_dobro ? p.dias / 2 : p.dias) : (e.prazo_dias || 0)}"></div>
+        <div class="field"><label for="f-cont">Contagem</label><select id="f-cont"><option value="uteis" ${(p?.contagem || e.contagem) !== "corridos" ? "selected" : ""}>Dias úteis</option><option value="corridos" ${(p?.contagem || e.contagem) === "corridos" ? "selected" : ""}>Dias corridos</option></select></div>
+        <label class="check"><input type="checkbox" id="f-dobro" ${p?.em_dobro ? "checked" : ""}> Prazo em dobro</label>
+        <button class="btn btn--accent" type="submit">${it.status === "a_conferir" ? "Confirmar prazo" : "Recalcular prazo"}</button>
+        ${it.status !== "concluido" ? `<button class="btn btn--ghost" type="button" id="b-cumprido">Marcar como cumprido</button>` : `<button class="btn btn--ghost" type="button" id="b-reabrir">Reabrir</button>`}
+      </form>
+    </section>
+
+    <section class="block" aria-labelledby="h-sug">
+      <h3 class="label" id="h-sug">Leitura da intimação</h3>
+      <div class="pencil">
+        <span class="pencil__tag">Sugestão do assistente, a conferir</span>
+        <dl>
+          <div><dt>Ato</dt><dd>${esc(e.tipo_ato || "—")}</dd></div>
+          <div><dt>Providência</dt><dd>${esc(e.providencia || "—")}</dd></div>
+          <div><dt>Peça sugerida</dt><dd>${esc(PECAS[e.peca_sugerida] || e.peca_sugerida || "—")}</dd></div>
+          <div><dt>De onde veio o prazo</dt><dd>${esc({ expresso_no_texto: "Escrito na intimação", inferido_da_lei: "Deduzido da lei", sem_prazo: "Sem prazo" }[e.prazo_origem] || "—")}</dd></div>
+        </dl>
+        ${e.fundamento_prazo ? `<p style="margin:12px 0 0;font-size:14px;color:var(--p-muted)">Fundamento: ${esc(e.fundamento_prazo)}</p>` : ""}
+        ${(e.pontos_de_atencao || []).length ? `<ul>${e.pontos_de_atencao.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+      </div>
+      <div class="client">
+        <div><h4 class="label" style="margin:16px 0 6px">Para explicar ao cliente</h4><p>${esc(e.resumo_cliente || "—")}</p></div>
+        <button class="btn btn--ghost" id="b-cli" style="margin-top:16px">Copiar explicação</button>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="h-txt">
+      <h3 class="label" id="h-txt">Texto publicado <span class="mono" style="text-transform:none;letter-spacing:0">${br(d.data_disponibilizacao)} · ${esc(d.origem)}</span></h3>
+      <div class="clip">${esc(d.texto)}</div>
+    </section>
+
+    <section class="block" aria-labelledby="h-min">
+      <h3 class="label" id="h-min">Minuta</h3>
+      <form class="form" id="f-min" style="margin-top:0">
+        <div class="field" style="min-width:220px"><label for="f-mod">Modelo do escritório</label><select id="f-mod">${S.modelos.map((m) => `<option value="${m}" ${m === e.peca_sugerida ? "selected" : ""}>${PECAS[m] || m}</option>`).join("")}</select></div>
+        <div class="field" style="flex:1;min-width:240px"><label for="f-notas">Fatos e orientações para a minuta</label><textarea id="f-notas" placeholder="Ex.: cliente nega a dívida; pagou em março de 2026; pedir gratuidade."></textarea></div>
+        <button class="btn" type="submit" id="b-min">${it.minuta ? "Gerar de novo" : "Gerar minuta"}</button>
+      </form>
+      <div class="status" id="s-min" role="status"></div>
+      ${it.minuta ? `
+      <div class="minuta"><div class="minuta__tarja" aria-hidden="true">MINUTA</div>${renderMinuta(it.minuta)}</div>
+      <div class="minuta__bar">
+        <span class="left">${falta ? `faltam <b>${falta}</b> pontos para completar` : "nenhum ponto pendente"}</span>
+        <span style="flex:1"></span>
+        <button class="btn btn--ghost" id="b-copiar">Copiar texto</button>
+        <button class="btn btn--ghost" id="b-word">Baixar para Word</button>
+      </div>` : ""}
+    </section>
+
+    <section class="block" aria-labelledby="h-log">
+      <h3 class="label" id="h-log">Histórico</h3>
+      <ul class="log" id="log"><li>…</li></ul>
+    </section>
+  </article>`;
+
+  renderTrack(it);
+  api(`/api/auditoria/${it.id}`).then((ls) => {
+    const nomes = { importada: "importada do Diário", prazo_confirmado_pelo_advogado: "prazo conferido pelo advogado", concluida: "marcada como cumprida", reaberta: "reaberta", minuta_gerada: "minuta gerada" };
+    $("#log").innerHTML = ls.map((x) => `<li><b>${esc(x.quando.replace("T", " ").slice(0, 16))}</b> ${esc(nomes[x.acao] || x.acao)}</li>`).join("");
+  });
+  $("#voltar").onclick = () => { S.sel = null; $("#desk").classList.remove("has-sel"); renderList(); renderRuler(); renderDetail(); };
+  $("#f-conf").onsubmit = async (ev) => {
+    ev.preventDefault();
+    S.carimbo = it.id;
+    await acao(it.id, "confirmar", { dias: +$("#f-dias").value, contagem: $("#f-cont").value, em_dobro: $("#f-dobro").checked });
+  };
+  $("#b-cumprido")?.addEventListener("click", () => { S.carimbo = it.id; acao(it.id, "concluir", {}); });
+  $("#b-reabrir")?.addEventListener("click", () => acao(it.id, "reabrir", {}));
+  $("#b-cli").onclick = () => navigator.clipboard.writeText(e.resumo_cliente || "").then(() => $("#b-cli").textContent = "Copiada");
+  $("#f-min").onsubmit = async (ev) => {
+    ev.preventDefault();
+    $("#b-min").disabled = true; $("#s-min").innerHTML = `<span class="loading"></span>Escrevendo a minuta a partir do modelo…`;
+    try { await acao(it.id, "minuta", { modelo: $("#f-mod").value, notas: $("#f-notas").value }); }
+    catch (err) { $("#s-min").className = "status status--err"; $("#s-min").textContent = "Não foi possível gerar: " + err.message; $("#b-min").disabled = false; }
+  };
+  $("#b-copiar")?.addEventListener("click", () => navigator.clipboard.writeText(it.minuta).then(() => $("#b-copiar").textContent = "Copiado"));
+  $("#b-word")?.addEventListener("click", () => baixarWord(it));
+}
+
+async function acao(id, nome, corpo) {
+  const novo = await api(`/api/intimacoes/${id}/${nome}`, corpo);
+  S.itens = S.itens.map((i) => (i.id === id ? novo : i));
+  renderAll();
+}
+
+async function load() { S.itens = await api("/api/intimacoes"); renderAll(); }
+function renderAll() { renderTally(); renderList(); renderRuler(); renderDetail(); }
+
+/* ---------- buscar ---------- */
+async function importar(btn, path, body) {
+  const s = $("#s-busca"); btn.disabled = true; s.className = "status";
+  s.innerHTML = `<span class="loading"></span>Consultando e lendo as intimações…`;
+  try {
+    const r = await api(path, body);
+    s.innerHTML = `<span class="result">${r.encontradas !== undefined ? r.encontradas + " encontradas · " : ""}${r.novos} novas · ${r.repetidos} já na mesa</span>${r.erros.length ? `<br><span class="status--err">Não lidas: ${esc(r.erros.join("; "))}</span>` : ""}${r.novos ? ` <button class="btn btn--ghost" data-go="prazos" style="margin-left:12px">Ver na mesa</button>` : ""}`;
+    await load();
+  } catch (e) {
+    s.className = "status status--err";
+    s.textContent = "O Diário não respondeu agora (" + e.message + "). Tente de novo em alguns minutos.";
+  }
+  btn.disabled = false;
+}
+$("#f-busca").onsubmit = (ev) => {
+  ev.preventDefault();
+  if (!$("#oab").value.trim()) { $("#s-busca").className = "status status--err"; $("#s-busca").textContent = "Informe o número da OAB."; $("#oab").focus(); return; }
+  importar($("#b-busca"), "/api/importar/djen", { oab: $("#oab").value, uf: $("#uf").value, inicio: $("#ini").value, fim: $("#fim").value });
+};
+$("#b-ex").onclick = (ev) => importar(ev.target, "/api/importar/exemplos", {});
+
+/* ---------- calculadora ---------- */
+$("#f-calc").onsubmit = async (ev) => {
+  ev.preventDefault();
+  try {
+    const r = await api("/api/calcular", { data: $("#c-data").value, dias: +$("#c-dias").value, tribunal: $("#c-trib").value, contagem: $("#c-cont").value, em_dobro: $("#c-dobro").checked });
+    $("#c-res").innerHTML = `<div class="due"><div><div class="due__date" style="font-size:44px">${br(r.vencimento)}</div><div class="due__l">${longDate(r.vencimento)} · vencimento</div></div></div><ol class="memo" style="margin-top:20px">${r.memoria.map((m) => `<li>${esc(m)}</li>`).join("")}</ol>`;
+  } catch (e) { $("#c-res").innerHTML = `<p class="status--err">${esc(e.message)}</p>`; }
+};
+
+/* ---------- seus dados ---------- */
+async function renderDados() {
+  const f = await api("/api/feriados");
+  const rows = [];
+  Object.entries(f).forEach(([k, v]) => {
+    if (k.startsWith("_")) return;
+    (v.fixos || []).forEach((x) => rows.push([k, x.data, x.nome]));
+    (v.relativos_pascoa || []).forEach((x) => rows.push([k, "móvel", x.nome]));
+    (v.datas || []).forEach((x) => rows.push([k, br(x.data), x.nome]));
+  });
+  $("#t-fer").innerHTML = `<thead><tr><th>Tribunal</th><th>Data</th><th>Feriado</th></tr></thead><tbody>${rows.map((r) => `<tr><td>${esc(r[0])}</td><td class="mono">${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("")}</tbody>`;
+}
+
+/* ---------- início ---------- */
+(async () => {
+  const s = await api("/api/status");
+  S.hoje = s.hoje;
+  const nomes = { demonstracao: "Assistente em demonstração", api_key: "Assistente: Gemini", vertex: "Assistente: Gemini (Brasil)" };
+  $("#ia").textContent = nomes[s.modo]; $("#ia").classList.toggle("ok", s.modo !== "demonstracao");
+  $("#hoje").textContent = longDate(s.hoje);
+  $("#d-treino").textContent = s.modo === "demonstracao"
+    ? "Neste modo de demonstração nenhum texto sai do computador. Com o assistente ligado, o escritório usa um contrato em que o provedor não usa os textos para treinar modelos."
+    : s.modo === "vertex" ? "O assistente roda no Google Cloud, região de São Paulo, com contrato em que os textos não são usados para treinar modelos."
+    : "Use só chave de conta paga: no plano gratuito, o provedor pode usar os textos para melhorar seus produtos.";
+  if (s.online) {
+    $("#aviso").hidden = false;
+    $("#d-onde").textContent = "Nesta demonstração online, num servidor temporário em São Paulo: tudo é apagado quando o servidor reinicia, e a mesa volta com os exemplos fictícios. Na versão final, em servidores no Brasil, criptografados e com acesso restrito ao escritório.";
+    if (s.modo === "demonstracao") $("#d-treino").textContent = "Nesta demonstração o assistente não usa IA: são regras simples, e nenhum texto é enviado a provedor de IA. Com o assistente ligado, o escritório usa um contrato em que o provedor não usa os textos para treinar modelos.";
+  }
+  $("#fim").value = s.hoje; $("#ini").value = addDays(s.hoje, -7); $("#c-data").value = s.hoje;
+  S.modelos = await api("/api/modelos");
+  await load();
+})();
+</script>
+</body>
+</html>

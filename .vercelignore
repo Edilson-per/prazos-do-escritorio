@@ -1,0 +1,7 @@
+.taste-skill
+.claude
+.env
+dados/escritorio.db
+**/__pycache__
+tests
+shots

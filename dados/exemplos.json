@@ -1,0 +1,53 @@
+[
+  {
+    "id_externo": "exemplo-1",
+    "origem": "EXEMPLO (fictício)",
+    "data_disponibilizacao": "2026-11-10",
+    "tribunal": "TJSP",
+    "orgao": "2ª Vara Cível da Comarca de Campinas",
+    "tipo_comunicacao": "Citação",
+    "tipo_documento": "Despacho",
+    "classe": "PROCEDIMENTO COMUM CÍVEL",
+    "processo": "1000001-11.2026.8.26.0114",
+    "link": null,
+    "partes": [
+      {"nome": "MARIA EXEMPLO DA SILVA", "polo": "A"},
+      {"nome": "JOÃO FICTÍCIO DE SOUZA", "polo": "P"}
+    ],
+    "texto": "PROCEDIMENTO COMUM CÍVEL Nº 1000001-11.2026.8.26.0114\nAutora: MARIA EXEMPLO DA SILVA\nRéu: JOÃO FICTÍCIO DE SOUZA\n\nDESPACHO\nCite-se o réu para, querendo, apresentar contestação no prazo legal, sob pena de revelia. Considerando o desinteresse manifestado pela autora, deixo de designar audiência de conciliação. Intime-se."
+  },
+  {
+    "id_externo": "exemplo-2",
+    "origem": "EXEMPLO (fictício)",
+    "data_disponibilizacao": "2026-11-12",
+    "tribunal": "TJSP",
+    "orgao": "1ª Vara Judicial da Comarca de Exemplópolis",
+    "tipo_comunicacao": "Intimação",
+    "tipo_documento": "Ato ordinatório",
+    "classe": "CUMPRIMENTO DE SENTENÇA",
+    "processo": "4000002-22.2026.8.26.0999",
+    "link": null,
+    "partes": [
+      {"nome": "ANA MODELO PEREIRA", "polo": "A"},
+      {"nome": "EMPRESA FICTÍCIA LTDA", "polo": "P"}
+    ],
+    "texto": "CUMPRIMENTO DE SENTENÇA Nº 4000002-22.2026.8.26.0999\nExequente: ANA MODELO PEREIRA\nExecutada: EMPRESA FICTÍCIA LTDA\n\nATO ORDINATÓRIO\nManifeste-se a exequente em 5 dias sobre a impugnação ao cumprimento de sentença e os cálculos apresentados pela executada."
+  },
+  {
+    "id_externo": "exemplo-3",
+    "origem": "EXEMPLO (fictício)",
+    "data_disponibilizacao": "2026-11-06",
+    "tribunal": "TRF3",
+    "orgao": "5ª Vara Federal de São Paulo",
+    "tipo_comunicacao": "Intimação",
+    "tipo_documento": "Sentença",
+    "classe": "PROCEDIMENTO COMUM CÍVEL",
+    "processo": "5000003-33.2026.4.03.6100",
+    "link": null,
+    "partes": [
+      {"nome": "CARLOS TESTE ALMEIDA", "polo": "A"},
+      {"nome": "INSTITUTO NACIONAL DO SEGURO SOCIAL - INSS", "polo": "P"}
+    ],
+    "texto": "SENTENÇA\nVistos. Trata-se de ação ajuizada por CARLOS TESTE ALMEIDA em face do INSS, pleiteando a concessão de aposentadoria por tempo de contribuição. (...) Ante o exposto, JULGO IMPROCEDENTE o pedido, com resolução do mérito, nos termos do art. 487, I, do CPC. Condeno o autor ao pagamento de honorários, cuja exigibilidade fica suspensa em razão da gratuidade. P.R.I."
+  }
+]

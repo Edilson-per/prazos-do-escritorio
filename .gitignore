@@ -1,0 +1,11 @@
+# Segredos e dados locais
+.env
+dados/escritorio.db
+# Gerados
+__pycache__/
+*.pyc
+.vercel/
+shots/
+# Ferramentas
+.taste-skill/
+.claude/

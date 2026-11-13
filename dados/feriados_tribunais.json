@@ -1,0 +1,41 @@
+{
+  "_leia_me": "Feriados e suspensões além dos nacionais. A chave é o prefixo da sigla do tribunal (ex.: 'TRF' vale para TRF1 a TRF6). 'fixos' repetem todo ano (dd/mm); 'relativos_pascoa' usam dias em relação ao domingo de Páscoa; 'datas' são datas únicas (portarias, indisponibilidade do sistema). BASE INICIAL: conferir com o calendário oficial de cada tribunal antes de usar.",
+  "TRF": {
+    "fonte": "Lei 5.010/1966, art. 62",
+    "fixos": [
+      {"data": "11/08", "nome": "Dia do Advogado / Fundação dos cursos jurídicos"},
+      {"data": "01/11", "nome": "Todos os Santos"}
+    ],
+    "relativos_pascoa": [
+      {"dias": -4, "nome": "Quarta-feira Santa"},
+      {"dias": -3, "nome": "Quinta-feira Santa"}
+    ]
+  },
+  "TJSP": {
+    "fonte": "Conferir provimento anual do TJSP",
+    "fixos": [
+      {"data": "25/01", "nome": "Aniversário de São Paulo (comarca da capital)"},
+      {"data": "09/07", "nome": "Revolução Constitucionalista"}
+    ],
+    "relativos_pascoa": [
+      {"dias": -3, "nome": "Quinta-feira Santa"}
+    ],
+    "datas": []
+  },
+  "TJRJ": {
+    "fonte": "Conferir ato executivo anual do TJRJ",
+    "fixos": [
+      {"data": "23/04", "nome": "São Jorge"}
+    ],
+    "relativos_pascoa": [
+      {"dias": -3, "nome": "Quinta-feira Santa"}
+    ]
+  },
+  "TJMG": {
+    "fonte": "Conferir portaria anual do TJMG",
+    "fixos": [],
+    "relativos_pascoa": [
+      {"dias": -3, "nome": "Quinta-feira Santa"}
+    ]
+  }
+}
